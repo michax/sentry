@@ -1,27 +1,31 @@
 from __future__ import annotations
 
+import abc
 from typing import Any, Mapping, Sequence
 
 from . import Pipeline
 from .views.base import PipelineView
 
 
-class PipelineProvider:
+class PipelineProvider(abc.ABC):
     """
     A class implementing the PipelineProvider interface provides the pipeline
     views that the Pipeline will traverse through.
     """
 
+    key: str
+
     def __init__(self) -> None:
         self.config: dict[str, Any] = {}
 
+    @abc.abstractmethod
     def get_pipeline_views(self) -> Sequence[PipelineView]:
         """
         Returns a list of instantiated views which implement the PipelineView
         interface. Each view will be dispatched in order.
         >>> return [OAuthInitView(), OAuthCallbackView()]
         """
-        raise NotImplementedError
+        pass
 
     def update_config(self, config: Mapping[str, Any]) -> None:
         """
