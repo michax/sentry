@@ -13,6 +13,8 @@ class PipelineProvider(abc.ABC):
     views that the Pipeline will traverse through.
     """
 
+    #: A unique identifier (e.g. 'slack'). Used to lookup sibling classes and
+    #: the `key` used when creating Integration objects.
     key: str
 
     def __init__(self) -> None:

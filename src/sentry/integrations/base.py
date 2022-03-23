@@ -109,7 +109,7 @@ class IntegrationFeatures(Enum):
     DEPLOYMENT = "deployment"
 
 
-class IntegrationProvider(PipelineProvider):  # type: ignore
+class IntegrationProvider(PipelineProvider):
     """
     An integration provider describes a third party that can be registered within Sentry.
 
@@ -122,11 +122,6 @@ class IntegrationProvider(PipelineProvider):  # type: ignore
     class is just a descriptor for how that object functions, and what behavior
     it provides (such as extensions provided).
     """
-
-    # a unique identifier (e.g. 'slack').
-    # Used to lookup sibling classes and the ``key`` used when creating
-    # Integration objects.
-    key: Optional[str] = None
 
     # a unique identifier to use when creating the ``Integration`` object.
     # Only needed when you want to create the above object with something other
