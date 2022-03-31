@@ -328,7 +328,6 @@ export function getFunctionHelpText(alertType: AlertType): {
   if (hidePrimarySelectorSet.has(alertType)) {
     return {
       labelText: t('Select time interval'),
-      timeWindowText,
     };
   }
   return {
