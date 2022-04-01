@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from django.db import models
 from django.utils import timezone
 
@@ -126,6 +128,50 @@ class AuditLogEntryEvent:
     PROJECT_QUOTA_ADD = 150
     PROJECT_QUOTA_EDIT = 151
     PROJECT_QUOTA_REMOVE = 152
+
+
+@dataclass
+class AuditLogEvent:
+    event_id: int
+    name: str
+    api_name: str
+    get_note: any
+
+
+class AuditLogEventManager:
+    _event_registry = {}
+    _event_id_lookup = {}
+
+    def add(self, audit_log_event: "AuditLogEvent"):
+        if (
+            audit_log_event.name in self._event_registry
+            or audit_log_event.event_id in self._event_id_lookup
+        ):
+            raise Exception("Audit log event already registered")
+
+        self._event_registry[audit_log_event.name] = audit_log_event
+        self._event_id_lookup[audit_log_event.event_id] = audit_log_event
+
+    def get(self, event_id: int):
+        if event_id not in self._event_id_lookup:
+            raise Exception("Event ID does not exist")
+        return self._event_id_lookup[event_id]
+
+    def get_event_id(self, name: str):
+        if name not in self._event_registry:
+            raise Exception("Event does not exist")
+        return self._event_registry[name].event_id
+
+    def get_api_names(self):
+        # returns a list of all the api names
+        api_names = []
+        event_names = self._event_registry.keys()
+        for event in event_names:
+            api_names.append(self._event_registry[event].api_name)
+        return api_names
+
+
+audit_log_manager = AuditLogEventManager()
 
 
 class AuditLogEntry(Model):
